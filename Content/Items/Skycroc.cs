@@ -2,6 +2,7 @@
 
 namespace CroctoberMod.Content.Items;
 
+[AutoloadEquip(EquipType.Shoes)]
 internal class Skycroc : Croc
 {
     public override void UpdateAccessory(Player player, bool hideVisual)
