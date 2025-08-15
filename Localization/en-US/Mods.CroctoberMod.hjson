@@ -1,0 +1,6 @@
+SportsModeTooltip: "[c/AACCFF:Sports mode:] {0}"
+On: On
+Off: Off
+MiddleClickToFlip: "[c/999999:Middle click to {0} sports mode]"
+Enable: enable
+Disable: disable

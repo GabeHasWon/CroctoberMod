@@ -1,0 +1,13 @@
+Skycroc: {
+	DisplayName: Skycroc
+	Tooltip: "'Feels like flying!'"
+	SportsOn: Gain [c/AACCFF:three smaller] directional jumps
+	SportsOff: Gain [c/AACCFF:one large] directional jump
+}
+
+Crocodile: {
+	DisplayName: Croc-o-dile
+	Tooltip: "'Waterproof!...and also concerningly strong.'"
+	SportsOn: Gain [c/AACCFF:a large melee] damage increase when in water and the ability to [c/AACCFF:swim]
+	SportsOff: Gain [c/AACCFF:a small overall] damage increase when in water and [c/AACCFF:fast water movement]
+}
