@@ -11,3 +11,10 @@ Crocodile: {
 	SportsOn: Gain [c/AACCFF:a large melee] damage increase when in water and the ability to [c/AACCFF:swim]
 	SportsOff: Gain [c/AACCFF:a small overall] damage increase when in water and [c/AACCFF:fast water movement]
 }
+
+Mushoc: {
+	DisplayName: Mushoc
+	Tooltip: "'Soft and bright! Just don't eat them!'"
+	SportsOn: Mushrooms trail behind you, leaving a [c/AACCFF:damaging, short-lived] trail of [c/AACCFF:weak] light
+	SportsOff: Mushrooms trail behind you, leaving a [c/AACCFF:harmless, stable] trail of [c/AACCFF:strong] light
+}
