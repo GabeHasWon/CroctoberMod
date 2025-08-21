@@ -36,8 +36,12 @@ internal class MushocPlayer : ModPlayer
 
     private readonly Dictionary<Point16, int> ProjectilesPerTwoTiles = [];
 
-    public override void ResetEffects() => instance = null;
-        
+    public override void ResetEffects()
+    {
+        active = null;
+        instance = null;
+    }
+
     public override void PostUpdateEquips()
     {
         if (active is not null)

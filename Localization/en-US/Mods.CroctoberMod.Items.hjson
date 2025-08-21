@@ -18,3 +18,17 @@ Mushoc: {
 	SportsOn: Mushrooms trail behind you, leaving a [c/AACCFF:damaging, short-lived] trail of [c/AACCFF:weak] light
 	SportsOff: Mushrooms trail behind you, leaving a [c/AACCFF:harmless, stable] trail of [c/AACCFF:strong] light
 }
+
+TheGoldenCroc: {
+	DisplayName: The Golden Croc
+	Tooltip: "'Shiny...'"
+	SportsOn: Jumping into tiles damages them [c/AACCFF:a bit, and might drop additional items on break]
+	SportsOff: Jumping into tiles damages them [c/AACCFF:a lot]
+}
+
+SimpleCrocs: {
+	DisplayName: Simple Crocs
+	Tooltip: "'Sometimes, it's nice to keep it simple.'"
+	SportsOn: Tiles directly below you are much easier to [c/AACCFF:mine]
+	SportsOff: Tiles directly below you are much easier to [c/AACCFF:place]
+}
