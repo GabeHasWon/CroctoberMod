@@ -4,4 +4,8 @@ Off: Off
 MiddleClickToFlip: "[c/999999:Middle click to {0} sports mode]"
 Enable: enable
 Disable: disable
-Projectiles.MushocMushroom.DisplayName: Mushoc Mushroom
+
+Projectiles: {
+	MushocMushroom.DisplayName: Mushoc Mushroom
+	CrockProj.DisplayName: Crock Proj
+}

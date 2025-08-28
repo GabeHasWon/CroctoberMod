@@ -1,4 +1,8 @@
-﻿using Terraria.Audio;
+﻿using StructureHelper.API;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.ObjectData;
 
 namespace CroctoberMod.Content.Items;
 
@@ -29,8 +33,8 @@ public class SkycrocDoubleJump : ExtraJump
 
     public override void UpdateHorizontalSpeeds(Player player)
     {
-        player.runAcceleration *= 1.5f;
-        player.maxRunSpeed *= 1.5f;
+        player.runAcceleration *= player.JibbitModifier(1.5f, 1.8f);
+        player.maxRunSpeed *= player.JibbitModifier(1.5f, 1.8f);
     }
 
     public override void OnRefreshed(Player player)
@@ -58,7 +62,7 @@ public class SkycrocDoubleJump : ExtraJump
             player.GetJumpState(this).Available = true;
         }
 
-        float mul = player.GetModPlayer<SkycrocPlayer>().active is false ? 1.3f : 0.9f;
+        float mul = player.GetModPlayer<SkycrocPlayer>().active is false ? player.JibbitModifier(1.3f, 1.7f) : player.JibbitModifier(0.9f, 1.1f);
 
         if (player.controlRight)
         {
@@ -73,13 +77,61 @@ public class SkycrocDoubleJump : ExtraJump
         else
             player.velocity.Y -= 8 * mul;
 
-        for (int i = 0; i < 30; i++)
+        for (int i = 0; i < player.JibbitModifier(30, 45); i++)
         {
             Vector2 position = player.BottomLeft + new Vector2(Main.rand.NextFloat(player.width), 0);
             Vector2 velocity = -(player.velocity * new Vector2(0.4f, 0.4f)).RotatedByRandom(0.9f) * Main.rand.NextFloat(0.8f, 1.5f);
             var dust = Dust.NewDustPerfect(position, Main.rand.NextBool() ? DustID.Cloud : DustID.RainCloud, velocity, Scale: Main.rand.NextFloat(2, 3));
             dust.noGravity = true;
         }
+    }
+}
 
+public class SkycrocTile : ModTile
+{
+    public override void SetStaticDefaults()
+    {
+        Main.tileSolid[Type] = false;
+        Main.tileBlockLight[Type] = false;
+        Main.tileFrameImportant[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style1x1);
+        TileObjectData.newTile.CoordinateHeights = [18];
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 1, 0);
+        TileObjectData.addTile(Type);
+
+        RegisterItemDrop(ModContent.ItemType<Skycroc>());
+        AddMapEntry(new Color(53, 178, 241));
+
+        DustType = DustID.Skyware;
+        HitSound = SoundID.Dig;
+    }
+}
+
+public class SkycrocGeneration : ModSystem
+{
+    public override void Load() => On_WorldGen.CloudIsland += AddInSkycrocs;
+
+    private void AddInSkycrocs(On_WorldGen.orig_CloudIsland orig, int i, int j)
+    {
+        orig(i, j);
+
+        if (WorldGen.genRand.NextBool(3))
+            return;
+
+        for (int k = 0; k < 10000; ++k)
+        {
+            int variant = WorldGen.genRand.Next(6);
+            int x = i + WorldGen.genRand.Next(50, 90) * (WorldGen.genRand.NextBool() ? -1 : 1);
+            int y = j - WorldGen.genRand.Next(-10, 40);
+            string structure = "Structures/SkycrocCloud_" + variant;
+            Point16 size = Generator.GetStructureDimensions(structure, Mod);
+
+            if (Collision.SolidCollision(new Vector2(x, y) * 16, size.X * 16, size.Y * 16))
+                continue;
+
+            Generator.GenerateStructure(structure, new Point16(x, y), Mod);
+            break;
+        }
     }
 }

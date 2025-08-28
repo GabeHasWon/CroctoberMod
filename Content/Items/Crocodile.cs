@@ -32,7 +32,7 @@ internal class CrocodilePlayer : ModPlayer
             return;
         }
 
-        Player.breathEffectiveness += 2f;
+        Player.breathEffectiveness += Player.JibbitModifier(2, 2.5f);
 
         if (!Player.wet)
         {
@@ -42,13 +42,13 @@ internal class CrocodilePlayer : ModPlayer
         if (active.Value)
         {
             Player.accFlipper = true;
-            Player.GetDamage(DamageClass.Melee) += 0.4f;
+            Player.GetDamage(DamageClass.Melee) += Player.JibbitModifier(0.4f, 0.6f);
         }
         else
         {
             Player.ignoreWater = true;
-            Player.moveSpeed += 0.2f;
-            Player.GetDamage(DamageClass.Generic) += 0.1f;
+            Player.moveSpeed += Player.JibbitModifier(0.2f, 0.25f);
+            Player.GetDamage(DamageClass.Generic) += Player.JibbitModifier(0.1f, 0.2f);
         }
     }
 }

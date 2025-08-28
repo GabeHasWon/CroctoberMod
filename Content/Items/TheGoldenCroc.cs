@@ -1,5 +1,6 @@
 ﻿using System;
 using Terraria.DataStructures;
+using Terraria.GameContent.UI.Elements;
 using Terraria.Utilities;
 
 namespace CroctoberMod.Content.Items;
@@ -79,15 +80,18 @@ internal class GoldenPlayer : ModPlayer
             Player.PickTile(x, y, pick);
             Player.velocity.Y = 0.001f;
 
-            if (active is false)
+            if (active is false && Main.rand.NextFloat() < Player.JibbitModifier(0, 0.1f))
                 return;
 
             Tile tile = Main.tile[x, y];
 
             if (!tile.HasTile)
             {
-                Vector2 velocity = WorldGen.SolidTile(x, y - 1) ? new Vector2(0, Main.rand.NextFloat(1)) : new Vector2(0, Main.rand.NextFloat(-8, -6f));
+                Vector2 velocity = WorldGen.SolidTile(x, y - 1) ? new Vector2(0, Main.rand.NextFloat()) : new Vector2(0, Main.rand.NextFloat(-8, -6f));
                 (int type, Range stackRange) = DropPool.Get();
+                
+                if (Player.GlimmeringJibbit() && type == ItemID.None)
+                    (type, stackRange) = DropPool.Get();
 
                 if (type == ItemID.None)
                     return;

@@ -12,10 +12,10 @@ internal class ChestGeneration : ModSystem
 
             if (chest != null)
             {
-                if (Main.tile[chest.x, chest.y].TileFrameX == 36 && WorldGen.genRand.NextBool(4))
+                if (Main.tile[chest.x, chest.y].TileFrameX == 36 && WorldGen.genRand.NextBool(2))
                     AddItemToChest(chest, ModContent.ItemType<TheGoldenCroc>());
 
-                if (Main.tile[chest.x, chest.y].TileFrameX == 0 && WorldGen.genRand.NextBool(4))
+                if (Main.tile[chest.x, chest.y].TileFrameX == 0 && WorldGen.genRand.NextBool(2))
                     AddItemToChest(chest, ModContent.ItemType<SimpleCrocs>());
             }
         }

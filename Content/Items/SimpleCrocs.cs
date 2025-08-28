@@ -37,7 +37,7 @@ internal class SimplePlayer : ModPlayer
             Point16 pos = (self.BottomLeft + new Vector2(4, 4)).ToTileCoordinates16();
 
             if ((pos.X == x || pos.X + 1 == x) && pos.Y == y)
-                power *= 2;
+                power = (int)(power * self.JibbitModifier(2f, 2.5f));
         }
 
         return power;
@@ -58,7 +58,7 @@ internal class SimplePlayer : ModPlayer
         Point16 pos = Player.BottomLeft.ToTileCoordinates16();
 
         if (item.createTile != -1 && active is false && Player.tileTargetY == pos.Y)
-            return 1.6f;
+            return Player.JibbitModifier(1.6f, 2f);
 
         return 1f;
     }

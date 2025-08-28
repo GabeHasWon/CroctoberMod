@@ -27,6 +27,16 @@ internal class Mushoc : Croc
         player.GetModPlayer<MushocPlayer>().active = SportsMode;
         player.GetModPlayer<MushocPlayer>().instance = Item;
     }
+
+    public override void ModifyWeaponDamage(Player player, ref StatModifier damage) => damage += player.JibbitModifier(0, 0.5f);
+
+    public override void ModifyTooltips(List<TooltipLine> tooltips)
+    {
+        base.ModifyTooltips(tooltips);
+
+        if (!SportsMode)
+            tooltips.RemoveAll(x => x.Name == "Damage");
+    }
 }
 
 internal class MushocPlayer : ModPlayer
@@ -112,9 +122,9 @@ internal class MushocMushroom : ModProjectile
             Projectile.Opacity = Projectile.timeLeft / 60f;
 
         if (!Harmful)
-            Lighting.AddLight(Projectile.Center, new Vector3(87, 137, 255) / 280f * Projectile.Opacity);
+            Lighting.AddLight(Projectile.Center, new Vector3(87, 137, 255) / 280f * Projectile.Opacity * Main.player[Projectile.owner].JibbitModifier(1, 1.5f));
         else
-            Lighting.AddLight(Projectile.Center, new Vector3(140, 137, 255) / 400f * Projectile.Opacity);
+            Lighting.AddLight(Projectile.Center, new Vector3(140, 137, 255) / 400f * Projectile.Opacity * Main.player[Projectile.owner].JibbitModifier(1, 1.2f));
 
         Player owner = Main.player[Projectile.owner];
 

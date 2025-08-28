@@ -10,7 +10,7 @@ internal abstract class Croc : ModItem
 {
     protected override bool CloneNewInstances => true;
 
-    public static Dictionary<int, (LocalizedText on, LocalizedText off)> TooltipsByType = [];
+    public static Dictionary<int, (LocalizedText on, LocalizedText off, LocalizedText jibbit, LocalizedText jibbitSports)> TooltipsByType = [];
 
     public bool SportsMode = false;
     public bool Equipped = false;
@@ -25,7 +25,9 @@ internal abstract class Croc : ModItem
     public override void SetStaticDefaults()
     {
         Main.RegisterItemAnimation(Type, new DrawAnimationVertical(2, 2) { NotActuallyAnimating = true });
-        TooltipsByType.Add(Type, (this.GetLocalization("SportsOn"), this.GetLocalization("SportsOff")));
+        TooltipsByType.Add(Type, (this.GetLocalization("SportsOn"), this.GetLocalization("SportsOff"), this.GetLocalization("Jibbit"), this.GetLocalization("JibbitSports")));
+
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<GlimmeringJibbit>();
     }
 
     public override void SetDefaults()
@@ -41,6 +43,7 @@ internal abstract class Croc : ModItem
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         Equipped = true;
+        player.GetModPlayer<CrocPlayer>().hasCroc = true;
 
         if (Main.myPlayer == player.whoAmI && Main.HoverItem.ModItem is Croc croc && croc.Equipped && Main.mouseMiddle && Main.mouseMiddleRelease)
         {
@@ -62,6 +65,12 @@ internal abstract class Croc : ModItem
             Language.GetTextValue("Mods.CroctoberMod." + (SportsMode ? "On" : "Off")))));
 
         tooltips.Insert(1, SportsMode ? new TooltipLine(Mod, "SportsOn", TooltipsByType[Type].on.Value) : new TooltipLine(Mod, "SportsOff", TooltipsByType[Type].off.Value));
+
+        if (Main.LocalPlayer.GlimmeringJibbit())
+        {
+            LocalizedText line = SportsMode ? TooltipsByType[Type].jibbitSports : TooltipsByType[Type].jibbit;
+            tooltips.Insert(4, new TooltipLine(Mod, "Jibbit", line.Format(GlimmeringJibbit.GetShimmerGradient().Hex3())));
+        }
     }
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
@@ -90,4 +99,11 @@ internal abstract class Croc : ModItem
         spriteBatch.Draw(tex, Item.Center - Main.screenPosition, frame, lightColor, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0);
         return false;
     }
+}
+
+public class CrocPlayer : ModPlayer
+{
+    public bool hasCroc = false;
+
+    public override void ResetEffects() => hasCroc = false;
 }

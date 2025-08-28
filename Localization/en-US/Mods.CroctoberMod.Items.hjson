@@ -1,15 +1,21 @@
+JibbitPrefix: "[i:CroctoberMod/GlimmeringJibbit] [c/{0}:Glimmering Jibbit:]"
+
 Skycroc: {
 	DisplayName: Skycroc
 	Tooltip: "'Feels like flying!'"
 	SportsOn: Gain [c/AACCFF:three smaller] directional jumps
 	SportsOff: Gain [c/AACCFF:one large] directional jump
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Large] jump movement & jump speed boost"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Small] jump movement & jump speed boost"
 }
 
 Crocodile: {
 	DisplayName: Croc-o-dile
 	Tooltip: "'Waterproof!...and also concerningly strong.'"
-	SportsOn: Gain [c/AACCFF:a large melee] damage increase when in water and the ability to [c/AACCFF:swim]
-	SportsOff: Gain [c/AACCFF:a small overall] damage increase when in water and [c/AACCFF:fast water movement]
+	SportsOn: Gain [c/AACCFF:a large melee] damage increase when in water, longer breathing and the ability to [c/AACCFF:swim]
+	SportsOff: Gain [c/AACCFF:a small overall] damage increase when in water, longer breathing and [c/AACCFF:fast water movement]
+	Jibbit: "{$JibbitPrefix} Even longer breathing, [c/AACCFF:much higher melee damage]"
+	JibbitSports: "{$JibbitPrefix} Even longer breathing, [c/AACCFF:higher damage and increased movement]"
 }
 
 Mushoc: {
@@ -17,13 +23,17 @@ Mushoc: {
 	Tooltip: "'Soft and bright! Just don't eat them!'"
 	SportsOn: Mushrooms trail behind you, leaving a [c/AACCFF:damaging, short-lived] trail of [c/AACCFF:weak] light
 	SportsOff: Mushrooms trail behind you, leaving a [c/AACCFF:harmless, stable] trail of [c/AACCFF:strong] light
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Much stronger] light"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Increased damage] and [c/AACCFF:slightly stronger] light"
 }
 
 TheGoldenCroc: {
-	DisplayName: The Golden Croc
+	DisplayName: Golden Croc
 	Tooltip: "'Shiny...'"
-	SportsOn: Jumping into tiles damages them [c/AACCFF:a bit, and might drop additional items on break]
+	SportsOn: Jumping into tiles damages them [c/AACCFF:a bit, and may drop items]
 	SportsOff: Jumping into tiles damages them [c/AACCFF:a lot]
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Low chance to activate Sports Mode item dropping]"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Failed item drops are rerolled once]"
 }
 
 SimpleCrocs: {
@@ -31,4 +41,33 @@ SimpleCrocs: {
 	Tooltip: "'Sometimes, it's nice to keep it simple.'"
 	SportsOn: Tiles directly below you are much easier to [c/AACCFF:mine]
 	SportsOff: Tiles directly below you are much easier to [c/AACCFF:place]
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Much faster mining] directly below you"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Much faster placing] directly below you"
+}
+
+Hellcroc: {
+	DisplayName: Hellcroc
+	Tooltip: "(WIP)"
+	SportsOn: Dangerous falls break and [c/AACCFF:damage soft tiles] around the floor and your fall damage [c/AACCFF:a lot]
+	SportsOff: Dangerous falls break and [c/AACCFF:heavily damage tiles] around the floor and your fall damage [c/AACCFF:a bit]
+	Jibbit: Mods.CroctoberMod.Items.Hellcroc.JibbitLine
+	JibbitSports: Mods.CroctoberMod.Items.Hellcroc.JibbitSports
+}
+
+Crock: {
+	DisplayName: Crock
+	Tooltip: "'Needlessly durable!'"
+	SportsOn: Summons a Crock Elemental, which [c/AACCFF:shines strongly around itself]
+	SportsOff: Summons a Crock Elemental, which [c/AACCFF:shines soft light in the direction of your cursor]
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Somewhat] stronger lights, [c/AACCFF:better mouse tracking]"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Much] stronger lights"
+}
+
+GlimmeringJibbit: {
+	DisplayName: Glimmering Jibbit
+	Tooltip:
+		'''
+		Permanently buffs all Crocs
+		'Sure to dazzle and easy to use!'
+		'''
 }

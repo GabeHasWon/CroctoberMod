@@ -1,3 +1,4 @@
 displayName = Hidden Crocs
 author = GabeHasWon
 version = 0.1
+dllReferences = StructureHelper
