@@ -30,7 +30,7 @@ internal class SimplePlayer : ModPlayer
     {
         int power = orig(self, x, y, pickPower, hitBufferIndex, tileTarget);
         bool? active = self.GetModPlayer<SimplePlayer>().active;
-
+        
         // Vanilla uses power == 100 for Main.tileNoFail, so I avoid that
         if (active is true && power != 100)
         {

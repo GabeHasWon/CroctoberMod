@@ -8,5 +8,6 @@ namespace CroctoberMod;
 
 public class CroctoberMod : Mod
 {
-
+    public override void Load() => NPCUtils.NPCUtils.TryLoadBestiaryHelper();
+    public override void Unload() => NPCUtils.NPCUtils.UnloadBestiaryHelper();
 }

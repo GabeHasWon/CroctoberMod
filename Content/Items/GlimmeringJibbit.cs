@@ -73,7 +73,7 @@ internal class JibbitLayer : PlayerDrawLayer
         int yPos = (int)(drawInfo.Position.Y + drawInfo.drawPlayer.height - drawInfo.drawPlayer.legFrame.Height + 4f);
         var pos = new Vector2(xPos, yPos) - Main.screenPosition;
         Vector2 finalPos = pos + plr.legPosition + drawInfo.legVect;
-        Color color = Color.Lerp(drawInfo.colorArmorLegs, Color.Pink, MathF.Sin((float)Main.timeForVisualEffects * 0.03f) * 0.25f + 0.75f);
+        var color = Color.Lerp(drawInfo.colorArmorLegs, Color.Pink, MathF.Sin((float)Main.timeForVisualEffects * 0.03f) * 0.25f + 0.75f);
         DrawData item = new(GlimmeringJibbitEquip.Value, finalPos, plr.legFrame, color, plr.legRotation, drawInfo.legVect, 1f, drawInfo.playerEffect);
         item.shader = plr.cShoe;
 

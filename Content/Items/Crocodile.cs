@@ -1,4 +1,6 @@
-﻿
+﻿using NPCUtils;
+using Terraria.GameContent.Bestiary;
+
 namespace CroctoberMod.Content.Items;
 
 [AutoloadEquip(EquipType.Shoes)]
@@ -51,4 +53,37 @@ internal class CrocodilePlayer : ModPlayer
             Player.GetDamage(DamageClass.Generic) += Player.JibbitModifier(0.1f, 0.2f);
         }
     }
+}
+
+public class CrocodileNPC : ModNPC
+{
+    public override void SetStaticDefaults() => Main.npcFrameCount[Type] = 6;
+
+    public override void SetDefaults()
+    {
+        NPC.CloneDefaults(NPCID.Piranha);
+        NPC.damage = 14;
+        NPC.lifeMax = 15;
+        NPC.defense = 0;
+        NPC.aiStyle = NPCAIStyleID.Piranha;
+
+        AIType = NPCID.Piranha;
+        AnimationType = NPCID.Piranha;
+    }
+
+    public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+    {
+        NPC.damage = 14;
+        NPC.lifeMax = 15;
+        NPC.defense = 0;
+    }
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+    {
+        bestiaryEntry.AddInfo(this, "Jungle");
+        bestiaryEntry.UIInfoProvider = new CritterUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[Type]);
+    }
+
+    public override float SpawnChance(NPCSpawnInfo spawnInfo) => spawnInfo.Water && spawnInfo.Player.ZoneJungle ? 0.2f : 0;
+    public override void ModifyNPCLoot(NPCLoot npcLoot) => npcLoot.AddCommon<Crocodile>();
 }

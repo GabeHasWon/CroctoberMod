@@ -8,6 +8,9 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
+	  <Reference Include="NPCUtils">
+	    <HintPath>Libraries\NPCUtils.dll</HintPath>
+	  </Reference>
 	  <Reference Include="StructureHelper">
 	    <HintPath>Libraries\StructureHelper.dll</HintPath>
 	  </Reference>

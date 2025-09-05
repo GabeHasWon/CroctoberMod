@@ -11,7 +11,7 @@ Skycroc: {
 
 Crocodile: {
 	DisplayName: Croc-o-dile
-	Tooltip: "'Waterproof!...and also concerningly strong.'"
+	Tooltip: "'Both waterproof and concerningly strong!'"
 	SportsOn: Gain [c/AACCFF:a large melee] damage increase when in water, longer breathing and the ability to [c/AACCFF:swim]
 	SportsOff: Gain [c/AACCFF:a small overall] damage increase when in water, longer breathing and [c/AACCFF:fast water movement]
 	Jibbit: "{$JibbitPrefix} Even longer breathing, [c/AACCFF:much higher melee damage]"
@@ -47,7 +47,7 @@ SimpleCrocs: {
 
 Hellcroc: {
 	DisplayName: Hellcroc
-	Tooltip: "(WIP)"
+	Tooltip: (WIP)
 	SportsOn: Dangerous falls break and [c/AACCFF:damage soft tiles] around the floor and your fall damage [c/AACCFF:a lot]
 	SportsOff: Dangerous falls break and [c/AACCFF:heavily damage tiles] around the floor and your fall damage [c/AACCFF:a bit]
 	Jibbit: Mods.CroctoberMod.Items.Hellcroc.JibbitLine
@@ -69,5 +69,50 @@ GlimmeringJibbit: {
 		'''
 		Permanently buffs all Crocs
 		'Sure to dazzle and easy to use!'
+		'''
+}
+
+SandyCrocs: {
+	DisplayName: Sandy Crocs
+	Tooltip: "'Waterproof!...but not sandproof.'"
+	SportsOn: "Fishing lines can't break, [c/AACCFF:garbage fishing items are converted to small potion vials], and all bobbers glow [c/AACCFF:softly]"
+	SportsOff: "Fishing lines can't break, [c/AACCFF:fishing pool size is ignored, +5 fishing power], and all bobbers glow [c/AACCFF:strongly]"
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:+5 additional fishing power] and stronger bobber glow"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Trash can transform into a new vial type] and stronger bobber glow"
+}
+
+FuriousVial: {
+	DisplayName: Furious Vial
+	Tooltip: 
+		'''
+		{$Buffs.FuriousBuff.Description}
+		'I TOLD you fishing is awesome!'
+		'''
+}
+
+GlimmeringVial: {
+	DisplayName: Glimmering Vial
+	Tooltip: 
+		'''
+		Grants a variety of small stats buffs
+		'Sometimes, mystery rewards you an even deeper mystery'
+		'''
+}
+
+JustifiedVial: {
+	DisplayName: Justified Vial
+	Tooltip: 
+		'''
+		{$Buffs.JustifiedBuff.Description}
+		'Don't let them tell you fishing is pointless!'
+		'''
+}
+
+SturdyVial: {
+	DisplayName: Sturdy Vial
+	Tooltip: 
+		'''
+		{$Buffs.SturdyBuff.Description}
+		'One man's trash is another man's mysterious potion'
 		'''
 }

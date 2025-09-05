@@ -1,7 +1,10 @@
-﻿
-using ReLogic.Content;
+﻿using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using Terraria.DataStructures;
+using Terraria.GameContent.Biomes;
+using Terraria.ObjectData;
+using Terraria.Utilities;
 
 namespace CroctoberMod.Content.Items;
 
@@ -146,4 +149,117 @@ internal class CrockProj : ModProjectile
     }
 
     private static float GetSine(float offset) => MathF.Sin((float)Main.timeForVisualEffects * 0.08f + offset) * 0.1f;
+}
+
+public class CrockGeneration : ModSystem
+{
+    public override void Load() => On_GraniteBiome.CleanupTiles += EditGranite;
+
+    private void EditGranite(On_GraniteBiome.orig_CleanupTiles orig, GraniteBiome self, Point tileOrigin, Rectangle magmaMapArea)
+    {
+        orig(self, tileOrigin, magmaMapArea);
+
+        HashSet<Point16> positions = [];
+
+        for (int i = magmaMapArea.Left; i < magmaMapArea.Right; i++)
+        {
+            for (int j = magmaMapArea.Top; j < magmaMapArea.Bottom; j++)
+            {
+                int x = i + tileOrigin.X;
+                int y = j + tileOrigin.Y;
+
+                if (!WorldGen.SolidTile(x, y))
+                    continue;
+
+                positions.Add(new Point16(x, y));
+            }
+        }
+
+        WeightedRandom<int> rand = new(WorldGen.genRand);
+        rand.Add(0, 0.3f);
+        rand.Add(1);
+        rand.Add(2, 0.66f);
+        rand.Add(3, 0.2f);
+
+        int reps = rand;
+
+        for (int i = 0; i < reps; ++i)
+            PlaceGeode(WorldGen.genRand.Next([.. positions]));
+    }
+
+    internal static void PlaceGeode(Point16 position)
+    {
+        int size = WorldGen.genRand.Next(5, 10);
+        int gem = WorldGen.genRand.Next(4);
+
+        ushort gemWall = gem switch
+        {
+            0 => WallID.SapphireUnsafe,
+            1 => WallID.EmeraldUnsafe,
+            2 => WallID.RubyUnsafe,
+            _ => WallID.DiamondUnsafe
+        };
+
+        for (int i = position.X - size; i < position.X + size; i++)
+        {
+            for (int j = position.Y - size; j < position.Y + size; j++)
+            {
+                float distance = Vector2.Distance(position.ToVector2(), new Vector2(i, j)) * WorldGen.genRand.NextFloat(1, 1.2f);
+                Tile tile = Main.tile[i, j];
+
+                if (distance < size / 3f + WorldGen.genRand.NextFloat())
+                {
+                    tile.HasTile = false;
+                    tile.TileType = TileID.Dirt;
+                    tile.WallType = WallID.GraniteUnsafe;
+                }
+                else if (distance < size / 1.5f + WorldGen.genRand.NextFloat())
+                {
+                    tile.HasTile = false;
+                    tile.TileType = TileID.Dirt;
+
+                    if (WorldGen.genRand.NextBool(5))
+                    {
+                        WorldGen.PlaceTile(i, j, TileID.ExposedGems, true, false, -1, gem + 2);
+                        WorldGen.TileFrame(i, j);
+                    }
+
+                    tile.WallType = WorldGen.genRand.NextBool(3) ? gemWall : WallID.GraniteUnsafe;
+                }
+                else if (distance < size)
+                {
+                    tile.HasTile = true;
+                    tile.TileType = TileID.Granite;
+                }
+            }
+        }
+
+        WorldGen.PlaceObject(position.X, position.Y, ModContent.TileType<CrockTile>(), true);
+    }
+}
+
+public class CrockTile : ModTile
+{
+    public override void SetStaticDefaults()
+    {
+        Main.tileFrameImportant[Type] = true;
+        Main.tileNoAttach[Type] = true;
+        Main.tileLavaDeath[Type] = false;
+        Main.tileLighted[Type] = true;
+
+        TileID.Sets.FramesOnKillWall[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+        TileObjectData.newTile.AnchorBottom = AnchorData.Empty;
+        TileObjectData.newTile.AnchorTop = AnchorData.Empty;
+        TileObjectData.newTile.AnchorWall = true;
+        TileObjectData.addTile(Type);
+
+        DustType = DustID.Granite;
+
+        RegisterItemDrop(ModContent.ItemType<Crock>());
+        AddMapEntry(new Color(0, 192, 255));
+    }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => (r, g, b) = (0.05f, 0.05f, 0.5f);
 }
