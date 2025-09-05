@@ -10,7 +10,7 @@ internal class SandyCrocs : Croc
     {
         base.SetDefaults();
 
-        Item.Size = new Vector2(50, 32);
+        Item.Size = new Vector2(36, 26);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual)

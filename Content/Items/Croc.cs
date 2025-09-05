@@ -12,6 +12,8 @@ internal abstract class Croc : ModItem
 
     public static Dictionary<int, (LocalizedText on, LocalizedText off, LocalizedText jibbit, LocalizedText jibbitSports)> TooltipsByType = [];
 
+    protected readonly static object[] EmptyObjects = [];
+
     public bool SportsMode = false;
     public bool Equipped = false;
 
@@ -64,7 +66,8 @@ internal abstract class Croc : ModItem
         tooltips.Insert(1, new TooltipLine(Mod, "SportsMode", Language.GetTextValue("Mods.CroctoberMod.SportsModeTooltip",
             Language.GetTextValue("Mods.CroctoberMod." + (SportsMode ? "On" : "Off")))));
 
-        tooltips.Insert(1, SportsMode ? new TooltipLine(Mod, "SportsOn", TooltipsByType[Type].on.Value) : new TooltipLine(Mod, "SportsOff", TooltipsByType[Type].off.Value));
+        tooltips.Insert(1, SportsMode ? new TooltipLine(Mod, "SportsOn", TooltipsByType[Type].on.Format(GetSportsArgs())) 
+            : new TooltipLine(Mod, "SportsOff", TooltipsByType[Type].off.Format(GetSportsArgs())));
 
         if (Main.LocalPlayer.GlimmeringJibbit())
         {
@@ -72,6 +75,11 @@ internal abstract class Croc : ModItem
             tooltips.Insert(4, new TooltipLine(Mod, "Jibbit", line.Format(GlimmeringJibbit.GetShimmerGradient().Hex3())));
         }
     }
+
+    /// <summary>
+    /// Determines what is passed to the "SportsOn/Off" tooltip line.
+    /// </summary>
+    protected virtual object[] GetSportsArgs() => EmptyObjects;
 
     public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color itemColor, Vector2 origin, float scale)
     {

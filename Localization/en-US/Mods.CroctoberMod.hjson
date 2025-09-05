@@ -4,10 +4,13 @@ Off: Off
 MiddleClickToFlip: "[c/999999:Middle click to {0} sports mode]"
 Enable: enable
 Disable: disable
+Down: down
+Up: up
 
 Projectiles: {
 	MushocMushroom.DisplayName: Mushoc Mushroom
 	CrockProj.DisplayName: Crock
+	CrocStatueProj.DisplayName: Croc Statue Proj
 }
 
 NPCs: {
@@ -20,12 +23,12 @@ NPCs: {
 Buffs: {
 	FuriousBuff: {
 		DisplayName: Furious
-		Description: "+5% generic damage"
+		Description: +5% generic damage
 	}
 
 	GlimmeringBuff: {
 		DisplayName: Glimmering
-		Description: 
+		Description:
 			'''
 			+1 flat generic damage
 			+4% generic damage
@@ -37,11 +40,11 @@ Buffs: {
 
 	JustifiedBuff: {
 		DisplayName: Justified
-		Description: "+50 max health"
+		Description: +50 max health
 	}
 
 	SturdyBuff: {
 		DisplayName: Sturdy
-		Description: "+4 defense"
+		Description: +4 defense
 	}
 }
