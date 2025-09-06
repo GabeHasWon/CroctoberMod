@@ -1,4 +1,4 @@
-﻿namespace CroctoberMod.Content.Items;
+﻿namespace CroctoberMod.Content.Items.Vials;
 
 internal abstract class Vial : ModItem
 {

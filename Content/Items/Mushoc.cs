@@ -62,7 +62,7 @@ internal class MushocPlayer : ModPlayer
             {
                 int type = ModContent.ProjectileType<MushocMushroom>();
                 IEntitySource src = Player.GetSource_Accessory(instance);
-                int damage = (int)Player.GetDamage(DamageClass.Summon).ApplyTo(instance.damage);
+                int damage = (int)Player.GetDamage(DamageClass.Summon).ApplyTo(Player.JibbitModifier(instance.damage, instance.damage * 1.5f));
                 ProjectilesPerTwoTiles.Add(floor, Projectile.NewProjectile(src, Player.Bottom, Vector2.Zero, type, damage, 0, Player.whoAmI, active is false ? 0 : 1));
             }
         }

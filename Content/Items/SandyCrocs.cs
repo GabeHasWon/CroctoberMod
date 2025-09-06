@@ -1,4 +1,5 @@
-﻿using Terraria.DataStructures;
+﻿using CroctoberMod.Content.Items.Vials;
+using Terraria.DataStructures;
 using Terraria.Utilities;
 
 namespace CroctoberMod.Content.Items;

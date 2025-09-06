@@ -131,5 +131,14 @@ MarbleCrocs: {
 		Double tap again to teleport to it, breaking it
 		'''
 	Jibbit: Reduce max health penalty [c/AACCFF:a little, and the statue glows in the dark]
-	JibbitSports: Reduce max health penalty [c/AACCFF:a decent amount]
+	JibbitSports: Reduce max health penalty [c/AACCFF:a decent amount, and slightly increase the buff]
+}
+
+AncientCroc: {
+	DisplayName: Ancient Crocs
+	Tooltip: "'This brings up so many questions.'"
+	SportsOn: "[c/AACCFF:High] damage lasers shoot out of the Crocs, allowing [c/AACCFF:short] flight"
+	SportsOff: "[c/AACCFF:Medium] damage lasers shoot out of the Crocs, allowing flight"
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Highly] increased flight speed, [c/AACCFF:slightly] increased flight time, increased max flight speed"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Moderately] increased flight speed, [c/AACCFF:Highly] increased damage, increased max flight speed"
 }

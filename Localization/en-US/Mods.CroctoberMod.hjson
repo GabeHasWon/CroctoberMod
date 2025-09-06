@@ -11,6 +11,7 @@ Projectiles: {
 	MushocMushroom.DisplayName: Mushoc Mushroom
 	CrockProj.DisplayName: Crock
 	CrocStatueProj.DisplayName: Croc Statue Proj
+	AncientLaser.DisplayName: Ancient Laser
 }
 
 NPCs: {
@@ -46,5 +47,14 @@ Buffs: {
 	SturdyBuff: {
 		DisplayName: Sturdy
 		Description: +4 defense
+	}
+
+	StatueBuff: {
+		DisplayName: Statuesque
+		Description:
+			'''
+			+25% fading all damage up
+			+25% fading all movement speed
+			'''
 	}
 }

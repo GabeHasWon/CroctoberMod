@@ -1,9 +1,7 @@
-﻿using rail;
-using ReLogic.Content;
+﻿using ReLogic.Content;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent;
-using Terraria.GameContent.Bestiary;
 using Terraria.Localization;
 
 namespace CroctoberMod.Content.Items;
@@ -51,27 +49,33 @@ internal class MarblePlayer : ModPlayer
 
         if (HasAnyStatues(self, out Projectile statue))
         {
-            for (int i = 0; i < 20; ++i)
-            {
-                Dust.NewDust(statue.position, statue.width, statue.height, DustID.Marble, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
-            }
+            SpawnTeleportDust(statue);
 
             self.Teleport(statue.Center, -1);
 
             SoundEngine.PlaySound(SoundID.Item70, self.Center);
 
+            if (active)
+                self.AddBuff(ModContent.BuffType<StatueBuff>(), StatueBuff.MaxTime);
+
             statue.active = false;
             statue.netUpdate = true;
 
-            for (int i = 0; i < 20; ++i)
-            {
-                Dust.NewDust(statue.position, statue.width, statue.height, DustID.Marble, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
-            }
+            SpawnTeleportDust(statue);
 
             return;
         }
 
         Projectile.NewProjectile(self.GetSource_FromThis(), self.Center, Vector2.Zero, ModContent.ProjectileType<CrocStatueProj>(), 0, 0, self.whoAmI, active ? 1 : 0);
+    }
+
+    private static void SpawnTeleportDust(Projectile statue)
+    {
+        for (int i = 0; i < 30; ++i)
+        {
+            short type = Main.rand.NextBool(4) ? DustID.TeleportationPotion : DustID.Marble;
+            Dust.NewDust(statue.position, statue.width, statue.height, type, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+        }
     }
 
     private static bool HasAnyStatues(Player self, out Projectile statue)
@@ -134,14 +138,14 @@ public class CrocStatueProj : ModProjectile
         {
             Projectile.frame = 1;
 
-            Lighting.AddLight(Projectile.Center, new Vector3(0.9f, 0.9f, 0.9f));
+            Lighting.AddLight(Projectile.Center, new Vector3(0.8f, 0.8f, 0.3f));
         }
         else
             Projectile.frame = 0;
 
         Timer++;
         Projectile.velocity = new Vector2(MathF.Sin(Timer * 0.02f), MathF.Sin(Timer * 0.0125f)) * 0.2f;
-        Projectile.rotation = MathF.Sin(Timer * 0.02f + MathF.Cos(Timer * 0.01f)) * MathHelper.PiOver4 * 0.5f;
+        Projectile.rotation = MathF.Sin(Timer * 0.02f + MathF.Cos(Timer * 0.01f)) * MathHelper.PiOver4 * 0.25f;
 
         player.statLifeMax2 = (int)(player.statLifeMax2 * (Sports ? player.JibbitModifier(0.5f, 0.6f) : player.JibbitModifier(0.75f, 0.8f)));
         player.statLife = Math.Min(player.statLife, player.statLifeMax2);
@@ -160,5 +164,19 @@ public class CrocStatueProj : ModProjectile
         tex = Glow.Value;
         Main.EntitySpriteDraw(tex, pos, frame, color, Projectile.rotation, frame.Size() / 2f, Projectile.scale, SpriteEffects.None, 0);
         return false;
+    }
+}
+
+public class StatueBuff : ModBuff
+{
+    public const int MaxTime = 5 * 60;
+
+    public override void Update(Player player, ref int buffIndex)
+    {
+        int time = player.buffTime[buffIndex];
+        float factor = time / (float)MaxTime * player.JibbitModifier(1, 1.25f);
+
+        player.GetDamage(DamageClass.Generic) += 0.25f * factor;
+        player.moveSpeed *= 1 + factor * 0.25f;
     }
 }
