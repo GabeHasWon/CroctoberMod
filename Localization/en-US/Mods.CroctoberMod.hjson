@@ -12,6 +12,8 @@ Projectiles: {
 	CrockProj.DisplayName: Crock
 	CrocStatueProj.DisplayName: Croc Statue Proj
 	AncientLaser.DisplayName: Ancient Laser
+	MuncherOfOre.DisplayName: Muncher Of Ore
+	ThoughtProjectile.DisplayName: Thought Projectile
 }
 
 NPCs: {

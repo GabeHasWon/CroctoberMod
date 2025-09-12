@@ -142,3 +142,27 @@ AncientCroc: {
 	Jibbit: "{$JibbitPrefix} [c/AACCFF:Highly] increased flight speed, [c/AACCFF:slightly] increased flight time, increased max flight speed"
 	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Moderately] increased flight speed, [c/AACCFF:Highly] increased damage, increased max flight speed"
 }
+
+AncientCrocTileItem: {
+	DisplayName: Odd Statue
+	Tooltip: "'Seems to hold an almost vendor-like mechanism.'"
+}
+
+CorruptCroc: {
+	DisplayName: Crocorruption
+	Tooltip: "'Something a villain would wear...probably'"
+	SportsOn: Summons the Muncher of Ore, which helps you mine [c/AACCFF:quickly but not as powerfully in a small area].
+	SportsOff: Summons the Muncher of Ore, which helps you mine [c/AACCFF:slowly but at full power in a larger area].
+	Jibbit: "{$JibbitPrefix} Increases mining speed [c/AACCFF:marginally]"
+	JibbitSports: "{$JibbitPrefix} Increases mining speed [c/AACCFF:substantially]"
+	MiddleClickNotice: Middle click to call the Muncher back
+}
+
+CrimsonCroc: {
+	DisplayName: Crocrimson
+	Tooltip: "'Powerfully and viciously comfortable'"
+	SportsOn: Summons a Thought of Blood, which forces all nearby enemy drops [c/AACCFF:to drop at higher quantities]
+	SportsOff: Summons a Thought of Blood, which forces all nearby enemy drops [c/AACCFF:to drop with useful prefixes]
+	Jibbit: "{$JibbitPrefix} Dropped enemy loot has [c/AACCFF:consistently more powerful rarities]"
+	JibbitSports: "{$JibbitPrefix} Dropped enemy loot has [c/AACCFF:slightly higher stack boosts]"
+}

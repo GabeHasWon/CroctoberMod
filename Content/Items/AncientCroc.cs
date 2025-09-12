@@ -1,5 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
+using Terraria.GameContent.Generation;
+using Terraria.IO;
+using Terraria.ObjectData;
+using Terraria.WorldBuilding;
 
 namespace CroctoberMod.Content.Items;
 
@@ -134,5 +141,104 @@ public class AncientLaser : ModProjectile
 
         if (Main.rand.NextBool(20))
             Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GemTopaz);
+    }
+}
+
+public class AncientCrocTile : ModTile
+{
+    public override void SetStaticDefaults()
+    {
+        Main.tileSolid[Type] = false;
+        Main.tileBlockLight[Type] = false;
+        Main.tileFrameImportant[Type] = true;
+        Main.tileLighted[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
+        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.RandomStyleRange = 3;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 2, 0);
+        TileObjectData.addTile(Type);
+
+        AddMapEntry(new Color(177, 92, 31));
+
+        DustType = DustID.Lihzahrd;
+        HitSound = SoundID.Tink;
+    }
+
+    public override void ModifyLight(int i, int j, ref float r, ref float g, ref float b) => (r, g, b) = (0.1f, 0.1f, 0);
+
+    public override bool RightClick(int i, int j)
+    {
+        if (Main.LocalPlayer.HeldItem.type != ItemID.LihzahrdPowerCell)
+            return false;
+
+        Main.LocalPlayer.HeldItem.stack--;
+
+        if (Main.LocalPlayer.HeldItem.stack <= 0)
+            Main.LocalPlayer.HeldItem.TurnToAir();
+
+        Main.LocalPlayer.QuickSpawnItem(new EntitySource_TileInteraction(Main.LocalPlayer, i, j), ModContent.ItemType<AncientCroc>());
+        return true;
+    }
+
+    public override void MouseOver(int i, int j)
+    {
+        Main.LocalPlayer.cursorItemIconEnabled = true;
+        Main.LocalPlayer.cursorItemIconID = ItemID.LihzahrdPowerCell;
+    }
+}
+
+public class AncientCrocTileItem : ModItem
+{
+    public override void SetDefaults() => Item.DefaultToPlaceableTile(ModContent.TileType<AncientCrocTile>());
+    public override void AddRecipes() => CreateRecipe().AddIngredient(ItemID.LihzahrdBrick, 20).AddIngredient(ItemID.LihzahrdPowerCell).AddTile(TileID.MythrilAnvil).Register();
+}
+
+public class AncientGeneration : ModSystem
+{
+    public override void ModifyWorldGenTasks(List<GenPass> tasks, ref double totalWeight)
+    {
+        int index = tasks.FindIndex(x => x.Name == "Lihzahrd Altars");
+
+        if (index != -1 && tasks[index].Enabled)
+            tasks.Insert(index + 1, new PassLegacy("Ancient Crocs", GenerateAncientCrocs));
+    }
+
+    private void GenerateAncientCrocs(GenerationProgress progress, GameConfiguration configuration)
+    {
+        int successes = 0;
+
+        for (int i = 0; i < 20000; ++i)
+        {
+            int x = Main.dungeonX > Main.maxTilesX / 2 ? WorldGen.genRand.Next(100, Main.maxTilesX / 2) : WorldGen.genRand.Next(Main.maxTilesX / 2, Main.maxTilesX - 100);
+            int y = WorldGen.genRand.Next((int)Main.worldSurface, Main.maxTilesY - 200);
+            Tile tile = Main.tile[x, y];
+            Tile above = Main.tile[x, y - 1];
+
+            if (tile.HasTile && tile.TileType == TileID.LihzahrdBrick && above.WallType is WallID.LihzahrdBrickUnsafe or WallID.LihzahrdBrick)
+            {
+                Tile tileRight = Main.tile[x + 1, y];
+
+                tile.IsHalfBlock = false;
+                tile.Slope = SlopeType.Solid;
+
+                tileRight.IsHalfBlock = false;
+                tileRight.Slope = SlopeType.Solid;
+
+                WorldGen.PlaceObject(x, y - 1, ModContent.TileType<AncientCrocTile>(), true, WorldGen.genRand.Next(3));
+
+                if (above.HasTile && above.TileType == ModContent.TileType<AncientCrocTile>())
+                {
+                    successes++;
+
+                    if (successes >= 3)
+                        return;
+                }
+                else if (successes <= 0)
+                    i--;
+            }
+        }
     }
 }

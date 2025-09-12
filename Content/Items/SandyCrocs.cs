@@ -1,5 +1,7 @@
 ﻿using CroctoberMod.Content.Items.Vials;
+using System.Collections.Generic;
 using Terraria.DataStructures;
+using Terraria.ModLoader.IO;
 using Terraria.Utilities;
 
 namespace CroctoberMod.Content.Items;
@@ -29,6 +31,7 @@ internal class SandyCrocs : Croc
 internal class SandyPlayer : ModPlayer
 {
     public bool? active = null;
+    public bool hasGottenCrocs = false;
 
     public override void ResetEffects() => active = null;
 
@@ -62,6 +65,18 @@ internal class SandyPlayer : ModPlayer
             fish.stack = 1;
         }
     }
+
+    public override void AnglerQuestReward(float rareMultiplier, List<Item> rewardItems)
+    {
+        if (!hasGottenCrocs)
+        {
+            hasGottenCrocs = true;
+            rewardItems.Add(new Item(ModContent.ItemType<SandyCrocs>()));
+        }
+    }
+
+    public override void SaveData(TagCompound tag) => tag.Add("hasCrocs", hasGottenCrocs);
+    public override void LoadData(TagCompound tag) => hasGottenCrocs = tag.GetBool("hasCrocs");
 }
 
 internal class SandyProjectile : GlobalProjectile

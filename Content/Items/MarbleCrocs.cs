@@ -1,8 +1,16 @@
 ﻿using ReLogic.Content;
 using System;
+using System.Collections.Generic;
 using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.Enums;
 using Terraria.GameContent;
+using Terraria.GameContent.Biomes;
+using Terraria.GameContent.Generation;
+using Terraria.IO;
 using Terraria.Localization;
+using Terraria.ObjectData;
+using Terraria.WorldBuilding;
 
 namespace CroctoberMod.Content.Items;
 
@@ -178,5 +186,80 @@ public class StatueBuff : ModBuff
 
         player.GetDamage(DamageClass.Generic) += 0.25f * factor;
         player.moveSpeed *= 1 + factor * 0.25f;
+    }
+}
+
+public class MarbleCrocsStatue : ModTile
+{
+    public override void SetStaticDefaults()
+    {
+        Main.tileSolid[Type] = false;
+        Main.tileBlockLight[Type] = false;
+        Main.tileFrameImportant[Type] = true;
+
+        TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
+        TileObjectData.newTile.CoordinateHeights = [16, 18];
+        TileObjectData.newTile.Origin = new Point16(0, 1);
+        TileObjectData.newTile.RandomStyleRange = 1;
+        TileObjectData.newTile.StyleHorizontal = true;
+        TileObjectData.newTile.AnchorBottom = new AnchorData(AnchorType.SolidTile, 2, 0);
+        TileObjectData.addTile(Type);
+
+        AddMapEntry(new Color(203, 185, 151));
+        RegisterItemDrop(ModContent.ItemType<MarbleCrocs>());
+
+        DustType = DustID.Marble;
+        HitSound = SoundID.Tink;
+    }
+
+    public override void MouseOver(int i, int j)
+    {
+        Main.LocalPlayer.cursorItemIconEnabled = true;
+        Main.LocalPlayer.cursorItemIconID = ModContent.ItemType<MarbleCrocs>();
+    }
+}
+
+public class MarbleCrocGeneration : ModSystem
+{
+    public override void Load() => On_MarbleBiome.Place += AddCrocStatue;
+
+    private bool AddCrocStatue(On_MarbleBiome.orig_Place orig, MarbleBiome self, Point origin, StructureMap structures)
+    {
+        bool success = orig(self, origin, structures);
+
+        if (success && WorldGen.genRand.NextBool())
+            PlaceMarbleCrocStatue(origin);
+
+        return success;
+    }
+
+    private static void PlaceMarbleCrocStatue(Point origin)
+    {
+        const int MaxWidth = 150;
+        const int MaxHeight = 60;
+
+        for (int i = 0; i < 1500; ++i)
+        {
+            int x = origin.X + WorldGen.genRand.Next(MaxWidth);
+            int y = origin.Y + WorldGen.genRand.Next(MaxHeight);
+            Tile tile = Main.tile[x, y];
+            Tile above = Main.tile[x, y - 1];
+
+            if (tile.HasTile && tile.TileType == TileID.Marble && above.WallType is WallID.MarbleUnsafe)
+            {
+                Tile tileRight = Main.tile[x + 1, y];
+
+                tile.IsHalfBlock = false;
+                tile.Slope = SlopeType.Solid;
+
+                tileRight.IsHalfBlock = false;
+                tileRight.Slope = SlopeType.Solid;
+
+                WorldGen.PlaceObject(x, y - 1, ModContent.TileType<MarbleCrocsStatue>(), true, WorldGen.genRand.Next(1));
+
+                if (above.HasTile && above.TileType == ModContent.TileType<MarbleCrocsStatue>())
+                    return;
+            }
+        }
     }
 }
