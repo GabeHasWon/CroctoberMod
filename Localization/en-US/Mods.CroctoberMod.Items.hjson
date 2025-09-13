@@ -47,11 +47,11 @@ SimpleCrocs: {
 
 Hellcroc: {
 	DisplayName: Hellcroc
-	Tooltip: (WIP)
-	SportsOn: Dangerous falls break and [c/AACCFF:damage soft tiles] around the floor and your fall damage [c/AACCFF:a lot]
-	SportsOff: Dangerous falls break and [c/AACCFF:heavily damage tiles] around the floor and your fall damage [c/AACCFF:a bit]
-	Jibbit: Mods.CroctoberMod.Items.Hellcroc.JibbitLine
-	JibbitSports: Mods.CroctoberMod.Items.Hellcroc.JibbitSports
+	Tooltip: "'Sizzlingly stylish!'"
+	SportsOn: "[c/AACCFF:Full lava immunity] and [c/AACCFF:lava swimming]"
+	SportsOff: "[c/AACCFF:Gravity is turned off] when directly above nearby lava (hold DOWN to fall)"
+	Jibbit: "{$JibbitPrefix} [c/AACCFF:Hold UP to gain minor upwards speed]"
+	JibbitSports: "{$JibbitPrefix} [c/AACCFF:Increased in-lava movement speed]"
 }
 
 Crock: {
@@ -67,7 +67,7 @@ GlimmeringJibbit: {
 	DisplayName: Glimmering Jibbit
 	Tooltip:
 		'''
-		Permanently buffs all Crocs
+		Permanently buffs all Crocs in unique ways
 		'Sure to dazzle and easy to use!'
 		'''
 }
@@ -165,4 +165,13 @@ CrimsonCroc: {
 	SportsOff: Summons a Thought of Blood, which forces all nearby enemy drops [c/AACCFF:to drop with useful prefixes]
 	Jibbit: "{$JibbitPrefix} Dropped enemy loot has [c/AACCFF:consistently more powerful rarities]"
 	JibbitSports: "{$JibbitPrefix} Dropped enemy loot has [c/AACCFF:slightly higher stack boosts]"
+}
+
+DesertCrocs: {
+	DisplayName: Crocs of the Wanderer
+	Tooltip: "'Protects your feet from cacti...kinda'"
+	SportsOn: Traps [c/AACCFF:deal less damage to you] and they [c/AACCFF:deal more damage to enemies]
+	SportsOff: Traps [c/AACCFF:don't hurt you at all]
+	Jibbit: "{$JibbitPrefix} Traps [c/AACCFF:glow when you're nearby]"
+	JibbitSports: "{$JibbitPrefix} Traps deal [c/AACCFF:even less damage to you] and [c/AACCFF:even more damage to enemies]"
 }

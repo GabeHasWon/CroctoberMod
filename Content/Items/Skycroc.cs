@@ -64,18 +64,24 @@ public class SkycrocDoubleJump : ExtraJump
 
         float mul = player.GetModPlayer<SkycrocPlayer>().active is false ? player.JibbitModifier(1.3f, 1.7f) : player.JibbitModifier(0.9f, 1.1f);
 
-        if (player.controlRight)
+        if (Main.myPlayer == player.whoAmI)
         {
-            player.velocity.X = 10 * mul;
-            player.velocity.Y += 1f;
+            if (player.controlRight)
+            {
+                player.velocity.X = 10 * mul;
+                player.velocity.Y += 1f;
+            }
+            else if (player.controlLeft)
+            {
+                player.velocity.X = -10 * mul;
+                player.velocity.Y += 1f;
+            }
+            else
+                player.velocity.Y -= 8 * mul;
+
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, player.whoAmI);
         }
-        else if (player.controlLeft)
-        {
-            player.velocity.X = -10 * mul;
-            player.velocity.Y += 1f;
-        }
-        else
-            player.velocity.Y -= 8 * mul;
 
         for (int i = 0; i < player.JibbitModifier(30, 45); i++)
         {

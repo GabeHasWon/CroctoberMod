@@ -1,7 +1,4 @@
-﻿using Steamworks;
-using System;
-using System.Collections.Generic;
-using Terraria.DataStructures;
+﻿using Terraria.DataStructures;
 
 namespace CroctoberMod.Content.Items;
 
@@ -25,17 +22,9 @@ internal class Hellcroc : Croc
 
 internal class HellPlayer : ModPlayer
 {
-    private readonly static HashSet<int> Blocklist = [TileID.DemonAltar, TileID.Trees, TileID.MushroomTrees, TileID.PalmTree, TileID.ShadowOrbs, TileID.Cactus];
-
     public bool? active = null;
 
-    private float lastVelY = 0;
-
-    public override void ResetEffects()
-    {
-        active = null;
-        lastVelY = Player.velocity.Y;
-    }
+    public override void ResetEffects() => active = null;
 
     public override void PostUpdateEquips()
     {
@@ -44,50 +33,61 @@ internal class HellPlayer : ModPlayer
             return;
         }
 
-        if (active is false)
+        if (active is true && Player.lavaWet)
         {
-            Player.maxFallSpeed *= 1.75f;
-        }
-        else
-        {
-            Player.maxFallSpeed *= 3f;
-        }
-    }
+            Player.accFlipper = true;
 
-    public override void ModifyHurt(ref Player.HurtModifiers modifiers)
-    {
-        if (active is null && modifiers.DamageSource.SourceOtherIndex == 0)
-        {
-            return;
+            if (Player.GlimmeringJibbit())
+                Player.ignoreWater = true;
         }
 
-        if (active is false)
+        if (Main.myPlayer == Player.whoAmI)
         {
-            modifiers.FinalDamage -= 0.75f;
-        }
-        else
-        {
-            modifiers.FinalDamage -= 0.4f;
-        }
+            bool aboveLava = AboveLava();
 
-        //Impact();
-    }
+            if (!aboveLava || active is not false)
+                return;
 
-    private void Impact()
-    {
-        Point16 bottom = Player.Bottom.ToTileCoordinates16();
-        float dist = MathF.Sqrt(lastVelY) * 2;
-        Main.NewText(dist);
-
-        for (int x = bottom.X - (int)dist; x < bottom.X + (int)dist; ++x)
-        {
-            for (int y = bottom.Y; y < bottom.Y + (int)dist; ++y)
+            if (!Player.controlDown)
             {
-                if (Vector2.Distance(bottom.ToVector2(), new Vector2(x, y)) < dist)
-                {
-                    Player.PickTile(x, y, 100);
-                }
+                Player.gravity = 0;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
             }
+
+            if (Player.GlimmeringJibbit() && Player.controlUp && Player.velocity.Y > -6)
+                Player.velocity.Y = MathHelper.Max(Player.velocity.Y - 0.2f, -6);
+        }
+    }
+
+    public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
+    {
+        if (active is true && damageSource.SourceOtherIndex == 2)
+            return false;
+
+        return true;
+    }
+
+    private bool AboveLava()
+    {
+        Point position = Player.Bottom.ToTileCoordinates();
+        int originalY = position.Y;
+
+        while (true)
+        {
+            Tile tile = Main.tile[position];
+
+            if (WorldGen.SolidTile(tile) || tile.LiquidAmount > 0 && tile.LiquidType != LiquidID.Lava)
+                return false;
+
+            if (tile.LiquidAmount > 0 && tile.LiquidType == LiquidID.Lava)
+                return true;
+
+            if (position.Y > Main.maxTilesY - 20 || position.Y > originalY + 50)
+                return false;
+
+            position.Y++;
         }
     }
 }

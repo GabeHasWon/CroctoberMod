@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using CroctoberMod.Content.Syncing;
+using System.Collections.Generic;
+using System.IO;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
@@ -45,13 +47,16 @@ internal abstract class Croc : ModItem
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         Equipped = true;
-        player.GetModPlayer<CrocPlayer>().hasCroc = true;
+        player.GetModPlayer<CrocPlayer>().Crocs.Add(Type, Item);
 
         if (Main.myPlayer == player.whoAmI && Main.HoverItem.ModItem is Croc croc && croc.Equipped && Main.mouseMiddle && Main.mouseMiddleRelease)
         {
             SportsMode = !SportsMode;
 
             SoundEngine.PlaySound(new SoundStyle("CroctoberMod/Assets/Sound/SoftFlip"));
+
+            if (Main.netMode != NetmodeID.SinglePlayer)
+                Item.NetStateChanged();
         }
     }
 
@@ -107,11 +112,16 @@ internal abstract class Croc : ModItem
         spriteBatch.Draw(tex, Item.Center - Main.screenPosition, frame, lightColor, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0);
         return false;
     }
+
+    public override void NetSend(BinaryWriter writer) => writer.Write(SportsMode);
+    public override void NetReceive(BinaryReader reader) => SportsMode = reader.ReadBoolean();
 }
 
 public class CrocPlayer : ModPlayer
 {
-    public bool hasCroc = false;
+    public bool HasCroc => Crocs.Count > 0;
 
-    public override void ResetEffects() => hasCroc = false;
+    public Dictionary<int, Item> Crocs = [];
+
+    public override void ResetEffects() => Crocs.Clear();
 }

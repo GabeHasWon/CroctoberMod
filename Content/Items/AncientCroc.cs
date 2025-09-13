@@ -85,16 +85,6 @@ internal class AncientPlayer : ModPlayer
             {
                 flightTime -= active.Value ? 30 : Player.JibbitModifier(20, 18);
 
-                if (Main.myPlayer == Player.whoAmI)
-                {
-                    var vel = new Vector2(Main.rand.NextFloat(-0.2f, 0.2f), Player.JibbitModifier(Main.rand.NextFloat(6, 7), Main.rand.NextFloat(7, 9)));
-                    Vector2 pos = Player.BottomLeft + new Vector2(Main.rand.Next(Player.width), -10);
-                    int damage = (int)Player.JibbitModifier(instance.damage, instance.damage * 1.5f);
-                    Projectile.NewProjectile(Player.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<AncientLaser>(), damage, 0.5f, Player.whoAmI);
-                }
-
-                flightCooldown = 6;
-
                 float speed = 3.5f;
 
                 if (Player.GlimmeringJibbit())
@@ -105,10 +95,23 @@ internal class AncientPlayer : ModPlayer
                         speed = 4;
                 }
 
-                float max = Player.JibbitModifier(-14, -15);
+                if (Main.myPlayer == Player.whoAmI)
+                {
+                    var vel = new Vector2(Main.rand.NextFloat(-0.2f, 0.2f), Player.JibbitModifier(Main.rand.NextFloat(6, 7), Main.rand.NextFloat(7, 9)));
+                    Vector2 pos = Player.BottomLeft + new Vector2(Main.rand.Next(Player.width), -10);
+                    int damage = (int)Player.JibbitModifier(instance.damage, instance.damage * 1.5f);
+                    Projectile.NewProjectile(Player.GetSource_FromAI(), pos, vel, ModContent.ProjectileType<AncientLaser>(), damage, 0.5f, Player.whoAmI);
 
-                if (Player.velocity.Y > max)
-                    Player.velocity.Y = MathF.Max(Player.velocity.Y - speed, max);
+                    float max = Player.JibbitModifier(-14, -15);
+
+                    if (Player.velocity.Y > max)
+                        Player.velocity.Y = MathF.Max(Player.velocity.Y - speed, max);
+
+                    if (Main.netMode == NetmodeID.MultiplayerClient)
+                        NetMessage.SendData(MessageID.PlayerControls, -1, -1, null, Player.whoAmI);
+                }
+
+                flightCooldown = 6;
 
                 for (int i = 0; i < 3; i++)
                 {

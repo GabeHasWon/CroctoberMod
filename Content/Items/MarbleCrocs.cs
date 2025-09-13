@@ -1,4 +1,5 @@
-﻿using ReLogic.Content;
+﻿using CroctoberMod.Content.Syncing;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria.Audio;
@@ -52,12 +53,12 @@ internal class MarblePlayer : ModPlayer
         if (keyDir != dir)
             return;
 
-        if (self.GetModPlayer<MarblePlayer>().active is not { } active)
+        if (self.GetModPlayer<MarblePlayer>().active is not { } active || Main.myPlayer != self.whoAmI)
             return;
 
         if (HasAnyStatues(self, out Projectile statue))
         {
-            SpawnTeleportDust(statue);
+            SpawnTeleportDust(self.position, false);
 
             self.Teleport(statue.Center, -1);
 
@@ -66,10 +67,14 @@ internal class MarblePlayer : ModPlayer
             if (active)
                 self.AddBuff(ModContent.BuffType<StatueBuff>(), StatueBuff.MaxTime);
 
+            statue.timeLeft = 0;
             statue.active = false;
             statue.netUpdate = true;
 
-            SpawnTeleportDust(statue);
+            if (Main.netMode == NetmodeID.MultiplayerClient)
+                NetMessage.SendData(MessageID.KillProjectile, -1, -1, null, statue.whoAmI);
+
+            SpawnTeleportDust(self.position, false);
 
             return;
         }
@@ -77,12 +82,18 @@ internal class MarblePlayer : ModPlayer
         Projectile.NewProjectile(self.GetSource_FromThis(), self.Center, Vector2.Zero, ModContent.ProjectileType<CrocStatueProj>(), 0, 0, self.whoAmI, active ? 1 : 0);
     }
 
-    private static void SpawnTeleportDust(Projectile statue)
+    internal static void SpawnTeleportDust(Vector2 position, bool fromNet)
     {
+        if (!fromNet && Main.netMode == NetmodeID.MultiplayerClient)
+        {
+            new SpawnVFXModule(position, SpawnVFXModule.EffectType.MarbleTeleport).Send();
+            return;
+        }
+
         for (int i = 0; i < 30; ++i)
         {
             short type = Main.rand.NextBool(4) ? DustID.TeleportationPotion : DustID.Marble;
-            Dust.NewDust(statue.position, statue.width, statue.height, type, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+            Dust.NewDust(position, Player.defaultWidth, Player.defaultHeight, type, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
         }
     }
 

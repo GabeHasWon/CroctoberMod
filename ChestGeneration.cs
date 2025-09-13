@@ -12,11 +12,27 @@ internal class ChestGeneration : ModSystem
 
             if (chest != null)
             {
-                if (Main.tile[chest.x, chest.y].TileFrameX == 36 && WorldGen.genRand.NextBool(2))
-                    AddItemToChest(chest, ModContent.ItemType<TheGoldenCroc>());
+                Tile tile = Main.tile[chest.x, chest.y];
 
-                if (Main.tile[chest.x, chest.y].TileFrameX == 0 && WorldGen.genRand.NextBool(2))
-                    AddItemToChest(chest, ModContent.ItemType<SimpleCrocs>());
+                if (tile.TileType == TileID.Containers)
+                {
+                    if (tile.TileFrameX == 36 && WorldGen.genRand.NextBool(2))
+                        AddItemToChest(chest, ModContent.ItemType<TheGoldenCroc>());
+
+                    if (tile.TileFrameX == 0 && WorldGen.genRand.NextBool(2))
+                        AddItemToChest(chest, ModContent.ItemType<SimpleCrocs>());
+
+                    if (tile.TileFrameX == 612 && WorldGen.genRand.NextBool(2))
+                        AddItemToChest(chest, ModContent.ItemType<SandyCrocs>());
+
+                    if (tile.TileFrameX == 114 && WorldGen.genRand.NextBool(2))
+                        AddItemToChest(chest, ModContent.ItemType<Hellcroc>());
+                }
+                else if (tile.TileType == TileID.Containers2)
+                {
+                    if (tile.TileFrameX == 360 && WorldGen.genRand.NextBool(2))
+                        AddItemToChest(chest, ModContent.ItemType<DesertCrocs>());
+                }
             }
         }
     }

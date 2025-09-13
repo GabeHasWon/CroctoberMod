@@ -8,6 +8,12 @@
 		
 	</PropertyGroup>
 	<ItemGroup>
+	  <Reference Include="NetEasy">
+	    <HintPath>Libraries\NetEasy_v0.1.8.dll</HintPath>
+	  </Reference>
+	  <Reference Include="NetSerializer">
+	    <HintPath>Libraries\NetSerializer.dll</HintPath>
+	  </Reference>
 	  <Reference Include="NPCUtils">
 	    <HintPath>Libraries\NPCUtils.dll</HintPath>
 	  </Reference>

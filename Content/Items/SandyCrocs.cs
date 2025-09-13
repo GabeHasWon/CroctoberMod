@@ -86,7 +86,7 @@ internal class SandyProjectile : GlobalProjectile
     public override bool PreAI(Projectile projectile)
     {
         if (projectile.TryGetOwner(out var owner) && owner.GetModPlayer<SandyPlayer>().active is { } active)
-            Lighting.AddLight(projectile.Center, new Vector3(189, 160, 123) / (active ? 255f : 400f) * owner.JibbitModifier(1, 1.3f));
+            Lighting.AddLight(projectile.Center, new Vector3(189, 160, 123) / (!active ? 255f : 400f) * owner.JibbitModifier(1, 1.3f));
 
         return true;
     }

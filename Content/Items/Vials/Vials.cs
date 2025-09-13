@@ -10,7 +10,9 @@ internal abstract class Vial : ModItem
         Item.rare = ItemRarityID.Blue;
         Item.value = Item.buyPrice(0, 0, 2, 0);
         Item.useAnimation = Item.useTime = 30;
-        Item.placeStyle = ItemUseStyleID.DrinkLiquid;
+        Item.useStyle = ItemUseStyleID.DrinkLiquid;
+        Item.maxStack = Item.CommonMaxStack;
+        Item.consumable = true;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 
@@ -7,6 +8,13 @@ namespace CroctoberMod.Content.Items;
 [AutoloadEquip(EquipType.Shoes)]
 internal class CorruptCroc : Croc
 {
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<CrimsonCroc>();
+    }
+
     public override void SetDefaults()
     {
         base.SetDefaults();
@@ -44,7 +52,7 @@ internal class CorruptPlayer : ModPlayer
 
     public override void PostUpdateEquips()
     {
-        if (active is null)
+        if (active is null || Main.myPlayer != Player.whoAmI)
         {
             return;
         }
@@ -137,6 +145,7 @@ public class MuncherOfOre : ModProjectile
         Projectile.hostile = false;
         Projectile.Size = new Vector2(64);
         Projectile.tileCollide = false;
+        Projectile.netImportant = true;
     }
 
     public override bool? CanCutTiles() => false;
@@ -294,6 +303,20 @@ public class MuncherOfOre : ModProjectile
             parent = new Segment(Projectile.Center, parent ?? (Entity)Projectile, i == Length - 1);
             _segments.Add(parent);
         }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write((byte)Timer);
+        writer.Write(StoredTileType);
+        writer.Write(LastActive);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        Timer = reader.ReadByte();
+        StoredTileType = reader.ReadInt32();
+        LastActive = reader.ReadBoolean();
     }
 }
 

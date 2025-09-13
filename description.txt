@@ -1,1 +1,14 @@
-Modify this file with a description of your mod.
+--- Hidden Crocs ---
+by GabeHasWon
+commissioned by & for Croc's Croctober celebration
+
+Hidden Crocs adds 13 new Croc accessories throughout the world with wildly varying effects.
+From the Simple Crocs, which simply allow slightly faster mining, or the Granite Crock, which gives you a glowing Croc Elemental which glows -
+there's a lot of things these can do.
+
+Furthermore, each Croc has two different mode, toggled by "Sports Mode". 
+This mode will have different functionality when on or off, such as increased damage, modified movement, or even completely unique effects.
+
+Finally, the Glimmering Jibbitz is a global Croc buff obtained by shimmering any Croc (but the two evil variants), which has its own additional effects.
+
+Each Croc is found randomly or naturally throughout the world.

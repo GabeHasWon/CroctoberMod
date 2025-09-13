@@ -1,4 +1,5 @@
-﻿using ReLogic.Content;
+﻿using CroctoberMod.Content.Syncing;
+using ReLogic.Content;
 using System;
 using System.Reflection;
 using Terraria.DataStructures;
@@ -33,6 +34,7 @@ internal class GlimmeringPlayer : ModPlayer
 
     public override void SaveData(TagCompound tag) => tag.Add("usedJibbit", usedJibbit);
     public override void LoadData(TagCompound tag) => usedJibbit = tag.GetBool("usedJibbit");
+    public override void SyncPlayer(int toWho, int fromWho, bool newPlayer) => new SyncGlimmeringJibbitModule((byte)Player.whoAmI, usedJibbit).Send(toWho, -1, false);
 }
 
 internal static class GlimmeringExtension
@@ -60,12 +62,13 @@ internal class JibbitLayer : PlayerDrawLayer
     {
         Player plr = drawInfo.drawPlayer;
 
-        if (plr.shoe <= 0 || !plr.GetModPlayer<CrocPlayer>().hasCroc || ShouldOverrideLegsCheckPantsInfo.Invoke(null, [drawInfo]) is bool x && x)
+        if (plr.shoe <= 0 || !plr.GetModPlayer<CrocPlayer>().HasCroc || !plr.GlimmeringJibbit() || ShouldOverrideLegsCheckPantsInfo.Invoke(null, [drawInfo]) is bool x && x)
             return;
 
         if (drawInfo.isSitting)
         {
-            DrawSittingLegsInfo.Invoke(null, [drawInfo, GlimmeringJibbitEquip.Value, drawInfo.colorArmorLegs, plr.cShoe]);
+            object[] parameters = [drawInfo, GlimmeringJibbitEquip.Value, drawInfo.colorArmorLegs, plr.cShoe, true];
+            DrawSittingLegsInfo.Invoke(null, parameters);
             return;
         }
 

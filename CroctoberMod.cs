@@ -1,8 +1,10 @@
-global using Terraria.ModLoader;
-global using Terraria;
-global using Terraria.ID;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
+global using Terraria;
+global using Terraria.ID;
+global using Terraria.ModLoader;
+
+using System.IO;
 
 namespace CroctoberMod;
 
@@ -10,6 +12,8 @@ public class CroctoberMod : Mod
 {
     public override void Load() => NPCUtils.NPCUtils.TryLoadBestiaryHelper();
     public override void Unload() => NPCUtils.NPCUtils.UnloadBestiaryHelper();
+    public override void PostSetupContent() => NetEasy.NetEasy.Register(this);
+    public override void HandlePacket(BinaryReader reader, int whoAmI) => NetEasy.NetEasy.HandleModule(reader, whoAmI);
 }
 
 public static class Extensions

@@ -40,7 +40,7 @@ internal class CrockPlayer : ModPlayer
 
     public override void PostUpdateEquips()
     {
-        if (active is null)
+        if (active is null || Main.myPlayer != Player.whoAmI)
         {
             return;
         }

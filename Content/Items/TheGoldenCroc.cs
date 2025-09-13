@@ -1,6 +1,5 @@
 ﻿using System;
 using Terraria.DataStructures;
-using Terraria.GameContent.UI.Elements;
 using Terraria.Utilities;
 
 namespace CroctoberMod.Content.Items;
@@ -75,14 +74,14 @@ internal class GoldenPlayer : ModPlayer
 
     private void PickAtTile(int x, int y, int pick)
     {
-        if (Player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.SolidTile(x, y))
+        if (Player.HasEnoughPickPowerToHurtTile(x, y) && WorldGen.SolidTile(x, y) && Main.myPlayer == Player.whoAmI)
         {
             Player.PickTile(x, y, pick);
             Player.velocity.Y = 0.001f;
 
             if (active is false && Main.rand.NextFloat() < Player.JibbitModifier(0, 0.1f))
                 return;
-
+            
             Tile tile = Main.tile[x, y];
 
             if (!tile.HasTile)
@@ -100,6 +99,9 @@ internal class GoldenPlayer : ModPlayer
                 int item = Item.NewItem(new EntitySource_TileBreak(x, y), new Rectangle(x * 16, y * 16, 16, 16), type, stack);
                 Main.item[item].velocity = velocity;
                 Main.item[item].noGrabDelay = 80;
+
+                if (Main.netMode == NetmodeID.MultiplayerClient)
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, item);
             }
         }
     }

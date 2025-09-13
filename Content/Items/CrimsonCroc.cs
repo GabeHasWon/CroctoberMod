@@ -8,6 +8,13 @@ namespace CroctoberMod.Content.Items;
 [AutoloadEquip(EquipType.Shoes)]
 internal class CrimsonCroc : Croc
 {
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<CrimsonCroc>();
+    }
+
     public override void SetDefaults()
     {
         base.SetDefaults();
@@ -78,26 +85,14 @@ internal class CrimsonPlayer : ModPlayer
     private static int GuaranteeRarity(On_Item.orig_NewItem_Inner orig, IEntitySource source, int X, int Y, int Width, int Height, Item itemToClone, int Type, int Stack, 
         bool noBroadcast, int pfix, bool noGrabDelay, bool reverseLookup)
     {
-        Player player = Main.player[Player.FindClosest(new Vector2(X, Y), 1, 1)];
+        Player player = GetPlayersNearby(X, Y);
         ref bool? active = ref player.GetModPlayer<CrimsonPlayer>().active;
         Item sampleItem = ContentSamples.ItemsByType[Type];
 
         if (active is null || player.DistanceSQ(new Vector2(X, Y)) > 1500 * 1500 || source is not EntitySource_Loot { Entity: NPC } || sampleItem.IsACoin)
             return orig(source, X, Y, Width, Height, itemToClone, Type, Stack, noBroadcast, pfix, noGrabDelay, reverseLookup);
 
-        if (active is false)
-        {
-            ref int prefix = ref pfix;
-            // THIS NEEDS TESTING GABE!!!
-            if (itemToClone is not null)
-                prefix = ref itemToClone.prefix;
-
-            do
-            {
-                prefix = RarityPool.Get();
-            } while (sampleItem.CanRollPrefix(prefix));
-        }
-        else if (active is true && Stack < sampleItem.maxStack && !sampleItem.master && !sampleItem.expert)
+        if (active is true && Stack < sampleItem.maxStack && !sampleItem.master && !sampleItem.expert)
         {
             ref int stack = ref Stack;
 
@@ -116,11 +111,12 @@ internal class CrimsonPlayer : ModPlayer
 
             Vector2 pos = new(X, Y);
 
-            if (player.GetModPlayer<CrimsonPlayer>().proj is int proj)
+            if (player.GetModPlayer<CrimsonPlayer>().proj is int proj && player.whoAmI == Main.myPlayer)
             {
                 Projectile projectile = Main.projectile[proj];
                 pos = projectile.Center - new Vector2(0, 20);
                 projectile.velocity = Vector2.Zero;
+                projectile.netUpdate = true;
 
                 for (int i = 0; i < 15; ++i)
                     Dust.NewDust(projectile.position, projectile.width, projectile.height, DustID.BloodWater);
@@ -129,7 +125,47 @@ internal class CrimsonPlayer : ModPlayer
             PopupText.NewText(request, pos);
         }
 
-        return orig(source, X, Y, Width, Height, itemToClone, Type, Stack, noBroadcast, pfix, noGrabDelay, reverseLookup);
+        int item = orig(source, X, Y, Width, Height, itemToClone, Type, Stack, noBroadcast, pfix, noGrabDelay, reverseLookup);
+
+        if (active is false)
+        {
+            ref int prefix = ref pfix;
+
+            if (itemToClone is not null)
+                prefix = ref itemToClone.prefix;
+
+            int tries = 0;
+
+            do
+            {
+                prefix = (player.GlimmeringJibbit() ? GlimmeringRarityPool : RarityPool).Get();
+                tries++;
+            } while (!sampleItem.CanRollPrefix(prefix) && tries < 100);
+
+
+            if (tries < 100)
+                Main.item[item].Prefix(prefix);
+        }
+
+        return item;
+    }
+
+    private static Player GetPlayersNearby(int X, int Y)
+    {
+        if (Main.netMode == NetmodeID.SinglePlayer)
+            return Main.player[Player.FindClosest(new Vector2(X, Y), 1, 1)];
+
+        Player player = null;
+
+        foreach (Player other in Main.ActivePlayers)
+        {
+            if (other.DistanceSQ(new Vector2(X, Y)) < 1600 * 1600)
+            {
+                player = other;
+            }
+        }
+
+        return player;
     }
 
     public override void ResetEffects()
@@ -140,7 +176,7 @@ internal class CrimsonPlayer : ModPlayer
 
     public override void PostUpdateEquips()
     {
-        if (active is null)
+        if (active is null || Main.myPlayer != Player.whoAmI)
         {
             return;
         }
@@ -171,6 +207,7 @@ public class ThoughtProjectile : ModProjectile
         Projectile.hostile = false;
         Projectile.Size = new Vector2(64);
         Projectile.tileCollide = false;
+        Projectile.netImportant = true;
     }
 
     public override bool? CanCutTiles() => false;
