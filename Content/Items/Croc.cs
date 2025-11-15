@@ -109,7 +109,7 @@ internal abstract class Croc : ModItem
             frame.Y = tex.Height / 2;
         }
 
-        spriteBatch.Draw(tex, Item.Center - Main.screenPosition, frame, lightColor, 0f, frame.Size() / 2f, scale, SpriteEffects.None, 0);
+        spriteBatch.Draw(tex, Item.Center - Main.screenPosition, frame, lightColor, rotation, frame.Size() / 2f, scale, SpriteEffects.None, 0);
         return false;
     }
 
