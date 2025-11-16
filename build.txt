@@ -1,4 +1,4 @@
 displayName = Hidden Crocs
 author = GabeHasWon
-version = 1.0
+version = 1.0.0.1
 dllReferences = StructureHelper, NPCUtils, NetEasy_v0.1.8, NetSerializer
