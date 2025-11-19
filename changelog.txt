@@ -1,0 +1,4 @@
+1.0.0.1
+- Fixed Hellcrocs not spawning in Shadow Chests
+- Fixed Hellcrocs Sports Mode On functionality not working properly
+- Updated description, added GitHub

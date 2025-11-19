@@ -12,4 +12,6 @@ Finally, the Glimmering Jibbitz is a global Croc buff obtained by shimmering any
 
 Each Croc is found randomly or naturally throughout the world.
 
+GitHub: https://github.com/GabeHasWon/CroctoberMod/tree/main
+
 * Mod's Features Are Fan-Made And Inspired By Crocs iconic Classic Clog. The Mods Are Not Official Game Content Nor Are They Associated With The Game Developers And Publishers.

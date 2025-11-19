@@ -25,7 +25,7 @@ internal class ChestGeneration : ModSystem
                     if (tile.TileFrameX == 612 && WorldGen.genRand.NextBool(2))
                         AddItemToChest(chest, ModContent.ItemType<SandyCrocs>());
 
-                    if (tile.TileFrameX == 114 && WorldGen.genRand.NextBool(2))
+                    if (tile.TileFrameX == 144 && WorldGen.genRand.NextBool(2))
                         AddItemToChest(chest, ModContent.ItemType<Hellcroc>());
                 }
                 else if (tile.TileType == TileID.Containers2)

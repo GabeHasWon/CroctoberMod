@@ -36,6 +36,7 @@ internal class HellPlayer : ModPlayer
         if (active is true && Player.lavaWet)
         {
             Player.accFlipper = true;
+            Player.buffImmune[BuffID.OnFire] = true;
 
             if (Player.GlimmeringJibbit())
                 Player.ignoreWater = true;
@@ -61,13 +62,7 @@ internal class HellPlayer : ModPlayer
         }
     }
 
-    public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
-    {
-        if (active is true && damageSource.SourceOtherIndex == 2)
-            return false;
-
-        return true;
-    }
+    public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable) => active is true && damageSource.SourceOtherIndex == 2;
 
     private bool AboveLava()
     {
