@@ -86,7 +86,11 @@ internal class CrimsonPlayer : ModPlayer
         bool noBroadcast, int pfix, bool noGrabDelay, bool reverseLookup)
     {
         Player player = GetPlayersNearby(X, Y);
-        ref bool? active = ref player.GetModPlayer<CrimsonPlayer>().active;
+
+        if (player is null || !player.TryGetModPlayer(out CrimsonPlayer crimPlr))
+            return orig(source, X, Y, Width, Height, itemToClone, Type, Stack, noBroadcast, pfix, noGrabDelay, reverseLookup);
+
+        ref bool? active = ref crimPlr.active;
         Item sampleItem = ContentSamples.ItemsByType[Type];
 
         if (active is null || player.DistanceSQ(new Vector2(X, Y)) > 1500 * 1500 || source is not EntitySource_Loot { Entity: NPC } || sampleItem.IsACoin)
@@ -153,13 +157,13 @@ internal class CrimsonPlayer : ModPlayer
     private static Player GetPlayersNearby(int X, int Y)
     {
         if (Main.netMode == NetmodeID.SinglePlayer)
-            return Main.player[Player.FindClosest(new Vector2(X, Y), 1, 1)];
+            return Main.LocalPlayer;
 
         Player player = null;
 
         foreach (Player other in Main.ActivePlayers)
         {
-            if (other.DistanceSQ(new Vector2(X, Y)) < 1600 * 1600)
+            if (!other.dead && other.DistanceSQ(new Vector2(X, Y)) < 1600 * 1600)
             {
                 player = other;
             }
