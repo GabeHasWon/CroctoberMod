@@ -33,13 +33,20 @@ internal class HellPlayer : ModPlayer
             return;
         }
 
-        if (active is true && Player.lavaWet)
+        if (active is true)
         {
-            Player.accFlipper = true;
             Player.buffImmune[BuffID.OnFire] = true;
+            Player.buffImmune[BuffID.OnFire3] = true;
+            Player.buffImmune[BuffID.Burning] = true;
+            Player.burned = false;
 
-            if (Player.GlimmeringJibbit())
-                Player.ignoreWater = true;
+            if (Player.lavaWet)
+            {
+                Player.accFlipper = true;
+
+                if (Player.GlimmeringJibbit())
+                    Player.ignoreWater = true;
+            }
         }
 
         if (Main.myPlayer == Player.whoAmI)

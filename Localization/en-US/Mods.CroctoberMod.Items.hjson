@@ -1,4 +1,4 @@
-JibbitPrefix: "[i:CroctoberMod/GlimmeringJibbit] [c/{0}:Glimmering Jibbit:]"
+JibbitPrefix: "[i:CroctoberMod/GlimmeringJibbit] [c/{0}:Glimmering Jibbitz:]"
 
 Skycroc: {
 	DisplayName: Skycroc
@@ -64,7 +64,7 @@ Crock: {
 }
 
 GlimmeringJibbit: {
-	DisplayName: Glimmering Jibbit
+	DisplayName: Glimmering Jibbitz
 	Tooltip:
 		'''
 		Permanently buffs all Crocs in unique ways

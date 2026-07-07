@@ -1,10 +1,10 @@
-﻿using CroctoberMod.Content.Syncing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.Localization;
+using Terraria.ModLoader.IO;
 
 namespace CroctoberMod.Content.Items;
 
@@ -49,7 +49,7 @@ internal abstract class Croc : ModItem
         Equipped = true;
         player.GetModPlayer<CrocPlayer>().Crocs.Add(Type, Item);
 
-        if (Main.myPlayer == player.whoAmI && Main.HoverItem.ModItem is Croc croc && croc.Equipped && Main.mouseMiddle && Main.mouseMiddleRelease)
+        if (Main.myPlayer == player.whoAmI && Main.HoverItem.ModItem is Croc croc && croc.Name == Name && croc.Equipped && Main.mouseMiddle && Main.mouseMiddleRelease)
         {
             SportsMode = !SportsMode;
 
@@ -115,6 +115,9 @@ internal abstract class Croc : ModItem
 
     public override void NetSend(BinaryWriter writer) => writer.Write(SportsMode);
     public override void NetReceive(BinaryReader reader) => SportsMode = reader.ReadBoolean();
+
+    public override void SaveData(TagCompound tag) => tag.Add("sports", SportsMode);
+    public override void LoadData(TagCompound tag) => SportsMode = tag.GetBool("sports");
 }
 
 public class CrocPlayer : ModPlayer

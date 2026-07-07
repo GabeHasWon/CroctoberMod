@@ -1,2 +1,4 @@
-1.0.0.2
-- Fixed Crocrimson error on servers, causing issues
+1.0.0.3
+- Fixed Skycroc not resetting fall height on jump
+- Fixed Hellcroc not properly giving burning immunities
+- Fixed swapping Sports Mode occuring for every equipped Croc instead of only the hovered Croc

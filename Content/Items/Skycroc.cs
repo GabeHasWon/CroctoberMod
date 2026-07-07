@@ -57,6 +57,8 @@ public class SkycrocDoubleJump : ExtraJump
 
         jumps--;
 
+        player.fallStart = (int)(player.Center.Y / 16f);
+
         if (jumps > 0)
         {
             player.GetJumpState(this).Available = true;
